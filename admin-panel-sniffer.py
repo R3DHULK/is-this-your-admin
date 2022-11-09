@@ -47,14 +47,14 @@ def saveResults(file_name, found_pages, progress=0):
         print("total progress: %d\n______________________________________________" % progress, file=f)
 
 def main(domain, progress=0, ext="a", strict=False, save=True, visible=True, wordlist_file="admin_login.txt"):
-    print(" [+] HULK Is On Progress... Feel Free To Press Ctrl+C At Any Point To Abort...")
+    print("\033[92m [+] HULK Is On Progress... Feel Free To Press Ctrl+C At Any Point To Abort...")
     resp_codes = {403 : "request forbidden", 401 : "authentication required"}#HTTP response codes
     found = []#list to hold the results we find
     domain = adjustDomainName(domain)#correct domain name for urllib
 
-    print(" [+] Loading Wordlist...")
+    print("\033[95m [+] Loading Wordlist...")
     attempts = loadWordList(wordlist_file, ext)
-    print(" [+] Crawling...")
+    print("\033[89m [+] Crawling...")
     
     for link in attempts[progress:]:#loop over every page in the wordlist file
         try:
@@ -68,7 +68,7 @@ def main(domain, progress=0, ext="a", strict=False, save=True, visible=True, wor
             try:
                 resp = req.urlopen(site)#try visiting the page
                 found.append(site)
-                print(" ✔️✔️✔️ " "%s page valid!" % site)
+                print("✔️✔️✔️ " "%s page valid!" % site)
 
             except HTTPError as e:#investigate the HTTPError we got
                 if three:
@@ -78,7 +78,7 @@ def main(domain, progress=0, ext="a", strict=False, save=True, visible=True, wor
                     
                 if c == 404:
                     if visible:
-                        print("%s not found..." % site)
+                        print("\033[97m %s not found..." % site)
                 else:
                     print("%s potential positive.. %s" % (site, resp_codes[c]))
                     if not strict:
@@ -180,7 +180,7 @@ try:
   github page : https://github.com/R3DHULK
 ''')
 except KeyboardInterrupt:
-	print(" \n [-] You Have Entered CTRL + C .... \n [-] Exiting Loading Period... \n [+] Continuing From Next Part....\n ")
+	print(" \n\033[91m [-] You Have Entered CTRL + C .... \n [-] Exiting Loading Period... \n [+] Continuing From Next Part....\n ")
 try:
 	if __name__ == "__main__":
 		
@@ -217,9 +217,9 @@ try:
 		(options, args) = parser.parse_args()
 
 		if not options.domain:
-			sys.exit(" [!] Hulk Wants You To Enter A Target Domain : \n\n%s" % parser.usage)
+			sys.exit("\033[91m [!] Hulk Wants You To Enter A Target Domain : \n\n%s" % parser.usage)
 		if not options.wordlist:
-			sys.exit(" [*] Please Enter A Wordlist File Or Go With Inbuilt Wordlist : \n\n%s" % parser.usage)
+			sys.exit("\033[91m [*] Please Enter A Wordlist File Or Go With Inbuilt Wordlist : \n\n%s" % parser.usage)
 
 		try:
 			strict_mode = eval(options.strict.title())
@@ -261,9 +261,10 @@ try:
 		else:
 			main(options.domain, progress, page_ext, strict_mode, save, verbose, wordlist)
 except KeyboardInterrupt:
-	print("\n [-] Ctrl + C Detected \n")
+	slowprint("\n\033[91m [-] Ctrl + C Detected \n")
+	input("\n\033[91m [+] Enter To Exit ")
 try:
-	input(" [+] Enter To Exit " )
+	input("\033[91m [+] Enter To Exit " )
 	def slowprint(f):
 		for c in f + '\n' :
 			sys.stdout.write(c)
@@ -273,4 +274,5 @@ try:
 	time.sleep(2)
 	os.system('clear')
 except KeyboardInterrupt:
-	print( "\n\033[90m [-] See You Again ^-^ ")
+	slowprint( "\n\033[90m [-] See You Again ^-^ ")
+	input("\n\033[91m [+] Enter To Exit ")
